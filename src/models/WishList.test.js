@@ -1,3 +1,4 @@
+import { getSnapshot, onSnapshot, onPatch } from "mobx-state-tree";
 import { WishListItem, WishList } from "./WishList";
 
 it("can create an instance of a model", () => {
@@ -14,11 +15,10 @@ it("can create an instance of a model", () => {
 });
 
 it("can create a wishlist", () => {
-    const list = WishList.create({
-        items: [{
-            name: "Chronicles of Narnia Box Set - C.S. Lewis",
-            price: 28.73,
-        }]
+    const list = WishList.create();
+    list.add({
+        name: "Chronicles of Narnia Box Set - C.S. Lewis",
+        price: 28.73,
     })
 
     expect(list.items.length).toBe(1);
@@ -27,8 +27,11 @@ it("can create a wishlist", () => {
     expect(list.items[0].image).toBe("");
 });
 
-it("can add new items", () => {
+it("can add new items 1", () => {
     const list = WishList.create();
+    const states = [];
+    onSnapshot(list, snapshot => states.push(snapshot))
+
     list.add(WishListItem.create({
         name: "Chesterton",
         price: 10,
@@ -39,4 +42,23 @@ it("can add new items", () => {
 
     list.items[0].changeName("Book of G.K. Chesterton")
     expect(list.items[0].name).toBe("Book of G.K. Chesterton");
+
+    expect(getSnapshot(list)).toMatchSnapshot()
+
+    expect(states).toMatchSnapshot()
+});
+
+it("can add new items 2", () => {
+    const list = WishList.create();
+    const patches = [];
+    onPatch(list, patch => patches.push(patch))
+
+    list.add(WishListItem.create({
+        name: "Chesterton",
+        price: 10,
+    }))
+
+    list.items[0].changeName("Book of G.K. Chesterton")
+
+    expect(patches).toMatchSnapshot()
 });
