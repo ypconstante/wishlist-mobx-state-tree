@@ -1,4 +1,5 @@
-import { getSnapshot, onSnapshot, onPatch } from "mobx-state-tree";
+import { reaction } from "mobx";
+import { getSnapshot, onSnapshot, onPatch, reac } from "mobx-state-tree";
 import { WishListItem, WishList } from "./WishList";
 
 it("can create an instance of a model", () => {
@@ -61,4 +62,29 @@ it("can add new items 2", () => {
     list.items[0].changeName("Book of G.K. Chesterton")
 
     expect(patches).toMatchSnapshot()
+});
+
+it("can calculate de total price of a wishlist", () => {
+    const list = WishList.create({
+        items: [{
+            name: "Machine Gun Preacher",
+            price: 7.35,
+            image: ""
+        }, {
+            name: "LEGO Mindstorm EV3",
+            price: 349.95
+        }]
+    });
+
+    expect(list.totalPrice).toBe(357.30)
+
+    let changed = 0;
+    reaction(() => list.totalPrice, () => changed++)
+
+    expect(changed).toBe(0);
+    list.items[0].changeName("Test")
+    expect(changed).toBe(0);
+    list.items[0].changePrice(10)
+    expect(changed).toBe(1);
+    expect(list.totalPrice).toBe(359.95)
 });
