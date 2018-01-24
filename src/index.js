@@ -21,11 +21,3 @@ ReactDOM.render(
     <App wishList={wishList} />,
     document.getElementById('root')
 );
-
-setInterval(
-    () => {
-        wishList.items[0].changePrice(wishList.items[0].price + 1);
-        console.log("le change");
-    },
-    1000
-)
