@@ -1,0 +1,17 @@
+.item {
+    border: 1px solid #333;
+    height: 200px;
+    margin: 0 auto;
+    max-width: 500px;
+    overflow: auto;
+}
+
+.item > img {
+    max-width: 200px;
+    max-height: 200px;
+    float: left;
+}
+
+.item:not(:last-of-type) {
+    margin-bottom: 10px;
+}
