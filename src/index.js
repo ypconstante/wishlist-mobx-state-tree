@@ -4,10 +4,10 @@ import { getSnapshot } from "mobx-state-tree";
 
 import './assets/index.css';
 import App from './components/App';
-import { WishList } from "./models/WishList";
+import { Group } from "./models/Group";
 
 const initialState = getInitialState();
-let wishList = WishList.create(initialState);
+let group = Group.create(initialState);
 
 renderApp();
 
@@ -18,10 +18,13 @@ if (module.hot) {
     );
 
     module.hot.accept(
-        ["./models/WishList"],
+        [
+            "./models/Group",
+            "./models/WishList",
+        ],
         () => {
-            const snapshot = getSnapshot(wishList);
-            wishList = WishList.create(snapshot);
+            const snapshot = getSnapshot(group);
+            group = Group.create(snapshot);
             renderApp();
         }
     );
@@ -29,21 +32,24 @@ if (module.hot) {
 
 function getInitialState() {
     return {
-        items: [{
-            name: "Machine Gun Preacher",
-            price: 7.35,
-            image: "https://images-na.ssl-images-amazon.com/images/I/91AFFK9fwkL._SL1500_.jpg",
-        }, {
-            name: "LEGO Mindstorm EV3",
-            price: 349.95,
-            image: "https://images-na.ssl-images-amazon.com/images/I/81XHPRseuVL._SL1000_.jpg",
-        }]
-    }
+        users: {
+            "a342": {
+                id: "a342",
+                name: "Homer",
+                gender: "m",
+            },
+            "5fc2": {
+                id: "5fc2",
+                name: "Marge",
+                gender: "f",
+            }
+        },
+    };
 }
 
 function renderApp() {
     ReactDOM.render(
-        <App wishList={wishList} />,
+        <App group={group} />,
         document.getElementById('root')
     );
 }
