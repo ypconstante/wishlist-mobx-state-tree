@@ -1,34 +1,33 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { onSnapshot } from "mobx-state-tree";
+import { getSnapshot } from "mobx-state-tree";
 
 import './assets/index.css';
 import App from './components/App';
 import { WishList } from "./models/WishList";
 
 const initialState = getInitialState();
-const wishList = WishList.create(initialState);
+let wishList = WishList.create(initialState);
 
-onSnapshot(
-    wishList,
-    (snapshot) => {
-        localStorage.setItem("wishListApp", JSON.stringify(snapshot));
-    }
-)
+renderApp();
 
-ReactDOM.render(
-    <App wishList={wishList} />,
-    document.getElementById('root')
-);
+if (module.hot) {
+    module.hot.accept(
+        ["./components/App"],
+        () => renderApp()
+    );
+
+    module.hot.accept(
+        ["./models/WishList"],
+        () => {
+            const snapshot = getSnapshot(wishList);
+            wishList = WishList.create(snapshot);
+            renderApp();
+        }
+    );
+}
 
 function getInitialState() {
-    const json = localStorage.getItem("wishListApp");
-    if (json != null) {
-        const data = JSON.parse(json);
-        if (WishList.is(data)) {
-            return data;
-        }
-    }
     return {
         items: [{
             name: "Machine Gun Preacher",
@@ -40,4 +39,11 @@ function getInitialState() {
             image: "https://images-na.ssl-images-amazon.com/images/I/81XHPRseuVL._SL1000_.jpg",
         }]
     }
+}
+
+function renderApp() {
+    ReactDOM.render(
+        <App wishList={wishList} />,
+        document.getElementById('root')
+    );
 }
