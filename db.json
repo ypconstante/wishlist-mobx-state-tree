@@ -23,8 +23,8 @@
       "image": "https://images-na.ssl-images-amazon.com/images/I/71CpQw%2BufNL._SL1000_.jpg"
     }
   ],
-  "users": {
-    "a342": {
+  "users": [
+    {
       "id": "a342",
       "name": "Homer",
       "gender": "m",
@@ -44,7 +44,7 @@
       },
       "recipient": null
     },
-    "5fc2": {
+    {
       "id": "5fc2",
       "name": "Marge",
       "gender": "f",
@@ -59,7 +59,7 @@
       },
       "recipient": null
     },
-    "d666": {
+    {
       "id": "d666",
       "name": "Flanders",
       "gender": "m",
@@ -74,5 +74,5 @@
       },
       "recipient": null
     }
-  }
+  ]
 }

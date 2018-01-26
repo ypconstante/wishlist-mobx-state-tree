@@ -1,4 +1,4 @@
-import { types, flow, applySnapshot } from "mobx-state-tree";
+import { types, flow, applySnapshot, getSnapshot, onSnapshot } from "mobx-state-tree";
 
 import { WishList } from "./WishList";
 
@@ -11,10 +11,24 @@ export const User = types
         recipient: types.maybe(types.reference(types.late(() => User))),
     })
     .actions(self => ({
+        afterCreate() {
+            onSnapshot(self, self.save);
+        },
         addSuggestions: flow(function* () {
             const response = yield fetch(`http://localhost:3001/suggestions_${self.gender}`);
             const suggestions = yield response.json();
             self.wishList.items.push(...suggestions);
+        }),
+        save: flow(function* () {
+            try {
+                yield fetch(`http://localhost:3001/users/${self.id}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(getSnapshot(self)),
+                });
+            } catch (e) {
+                console.error(`error to save user ${self.id}`, e)
+            }
         }),
     }));
 
@@ -45,7 +59,10 @@ export const Group = types
                     );
                     abortController = null;
                     const users = yield response.json();
-                    applySnapshot(self.users, users);
+                    applySnapshot(
+                        self.users,
+                        users.reduce((base, user) => ({ ...base, [user.id]: user }), {})
+                    );
                     console.log(`finished request ${idCurrentRequest}`);
                 } catch (e) {
                     console.log(`aborted request ${idCurrentRequest}`, e);
