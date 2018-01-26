@@ -22,5 +22,57 @@
       "price": 349.95,
       "image": "https://images-na.ssl-images-amazon.com/images/I/71CpQw%2BufNL._SL1000_.jpg"
     }
-  ]
+  ],
+  "users": {
+    "a342": {
+      "id": "a342",
+      "name": "Homer",
+      "gender": "m",
+      "wishList": {
+        "items": [
+          {
+            "name": "Machine Gun Preacher",
+            "price": 7.35,
+            "image": "https://images-na.ssl-images-amazon.com/images/I/91AFFK9fwkL._SL1000_.jpg"
+          },
+          {
+            "name": "LEGO Mindstorms EV3",
+            "price": 349.95,
+            "image": "https://images-na.ssl-images-amazon.com/images/I/71CpQw%2BufNL._SL1000_.jpg"
+          }
+        ]
+      },
+      "recipient": null
+    },
+    "5fc2": {
+      "id": "5fc2",
+      "name": "Marge",
+      "gender": "f",
+      "wishList": {
+        "items": [
+          {
+            "name": "The Notebook",
+            "price": 10.31,
+            "image": "https://images-na.ssl-images-amazon.com/images/I/51ZXkAJNYWL._SL1000_.jpg"
+          }
+        ]
+      },
+      "recipient": null
+    },
+    "d666": {
+      "id": "d666",
+      "name": "Flanders",
+      "gender": "m",
+      "wishList": {
+        "items": [
+          {
+            "name": "LEGO Mindstorms EV3",
+            "price": 349.95,
+            "image": "https://images-na.ssl-images-amazon.com/images/I/71CpQw%2BufNL._SL1000_.jpg"
+          }
+        ]
+      },
+      "recipient": null
+    }
+  }
 }

@@ -62,4 +62,4 @@ const User = observer(({ user }) => (
     </div>
 ));
 
-export default App;
+export default observer(App);
