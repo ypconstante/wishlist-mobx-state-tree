@@ -42,6 +42,11 @@ function getInitialState() {
                 id: "5fc2",
                 name: "Marge",
                 gender: "f",
+            },
+            "d666": {
+                id: "d666",
+                name: "Flanders",
+                gender: "m",
             }
         },
     };

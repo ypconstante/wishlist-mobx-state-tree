@@ -3,6 +3,7 @@ import logo from './../assets/logo.svg';
 import './App.css';
 
 import WishListView from "./WishListView"
+import { observer } from 'mobx-react';
 
 class App extends Component {
     constructor() {
@@ -29,14 +30,10 @@ class App extends Component {
                         </option>
                     ))}
                 </select>
-                {
-                    selectedUser
-                    && <WishListView wishList={selectedUser.wishList} />
-                }
-                {
-                    selectedUser
-                    && <button onClick={selectedUser.addSuggestions}>Add suggestions</button>
-                }
+                <button onClick={group.drawLots}>
+                    Draw lots
+                </button>
+                {selectedUser && <User user={selectedUser} />}
             </div>
         );
     }
@@ -47,5 +44,22 @@ class App extends Component {
         })
     }
 }
+
+const User = observer(({ user }) => (
+    <div>
+        <WishListView wishList={user.wishList} />
+        <button onClick={user.addSuggestions}>
+            Add suggestions
+        </button>
+
+        {user.recipient && (
+            <div>
+                <hr />
+                <h2>{user.recipient.name}</h2>
+                <WishListView wishList={user.recipient.wishList} readonly />
+            </div>
+        )}
+    </div>
+));
 
 export default App;

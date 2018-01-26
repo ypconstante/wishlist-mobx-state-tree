@@ -4,10 +4,11 @@ import { WishList } from "./WishList";
 
 export const User = types
     .model({
-        id: types.string,
+        id: types.identifier(),
         name: types.string,
         gender: types.enumeration("gender", ["m", "f"]),
-        wishList: types.optional(WishList, {})
+        wishList: types.optional(WishList, {}),
+        recipient: types.maybe(types.reference(types.late(() => User))),
     })
     .actions(self => ({
         addSuggestions: flow(function* () {
@@ -17,6 +18,39 @@ export const User = types
         }),
     }));
 
-export const Group = types.model({
-    users: types.map(User),
-});
+export const Group = types
+    .model({
+        users: types.map(User),
+    })
+    .actions(self => ({
+        drawLots() {
+            const allUsers = self.users.values();
+
+            if (allUsers.length <= 1)
+                return;
+
+            const remaining = [...allUsers];
+
+            allUsers.forEach((user) => {
+                user.recipient = null;
+                if (remaining.length === 1 && remaining[0] === user) {
+                    // last user on the list and only remaining
+                    const indexSwapWith = Math.floor(Math.random() * (allUsers.length - 1));
+                    const swapWith = allUsers[indexSwapWith];
+                    user.recipient = swapWith.recipient;
+                    swapWith.recipient = user;
+                } else {
+                    while (user.recipient == null) {
+                        const indexRecipient = Math.floor(Math.random() * remaining.length);
+                        const recipient = remaining[indexRecipient];
+
+                        if (recipient !== user) {
+                            user.recipient = recipient;
+                            remaining.splice(indexRecipient, 1);
+                        }
+                    }
+                }
+            })
+
+        }
+    }));

@@ -5,15 +5,18 @@ import WishListItemView from "./WishListItemView";
 import WishListItemEntry from "./WishListItemEntry";
 import "./WishListView.css";
 
-const WishListView = ({ wishList }) => (
+const WishListView = ({ wishList, readonly }) => (
     <div className="list">
         <ul>
             {wishList.items.map((item, index) =>
-                (<WishListItemView key={index} item={item} />)
+                (<WishListItemView key={index} item={item} readonly={readonly} />)
             )}
             Total: ${wishList.totalPrice}
 
-            <WishListItemEntry wishList={wishList} />
+            {
+                !readonly &&
+                <WishListItemEntry wishList={wishList} />
+            }
         </ul>
     </div>
 );
